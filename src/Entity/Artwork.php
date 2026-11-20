@@ -22,6 +22,10 @@ class Artwork
     #[ORM\Column]
     private ?int $id = null;
 
+    /** Identifiant de l'oeuvre dans l'API Art Institute of Chicago (clé naturelle, règle T2). */
+    #[ORM\Column(unique: true, nullable: true)]
+    private ?int $aicId = null;
+
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
@@ -56,6 +60,18 @@ class Artwork
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getAicId(): ?int
+    {
+        return $this->aicId;
+    }
+
+    public function setAicId(?int $aicId): static
+    {
+        $this->aicId = $aicId;
+
+        return $this;
     }
 
     public function getTitle(): ?string
