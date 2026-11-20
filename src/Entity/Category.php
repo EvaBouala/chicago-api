@@ -12,8 +12,8 @@ use Symfony\Component\Validator\Contraints as Assert;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 #[ApiResource (
-    normalizationContext: ['groups' => ['artwork:lire']],
-    denormalizationContext: ['groups' => ['artwork:ecrire']],
+    normalizationContext: ['groups' => ['category:lire']],
+    denormalizationContext: ['groups' => ['category:ecrire']],
 )]
 class Category
 {
