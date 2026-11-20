@@ -11,7 +11,10 @@ use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Contraints as Assert;
 
 #[ORM\Entity(repositoryClass: StyleRepository::class)]
-#[ApiResource]
+#[ApiResource (
+    normalizationContext: ['groups' => ['style:lire']],
+    denormalizationContext: ['groups' => ['style:ecrire']],
+)]
 class Style
 {
     #[ORM\Id]
