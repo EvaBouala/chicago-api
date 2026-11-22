@@ -23,6 +23,7 @@ class Category
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
+    #[Groups(['category:lire','category:ecrire','artwork:lire'])]
     private ?string $name = null;
 
     /**
