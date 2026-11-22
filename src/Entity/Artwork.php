@@ -23,32 +23,39 @@ class Artwork
     private ?int $id = null;
 
     /** Identifiant de l'oeuvre dans l'API Art Institute of Chicago (clé naturelle, règle T2). */
-    #[ORM\Column(unique: true, nullable: true)]
+    #[ORM\Column(unique: true, nullable: true)]  
+    #[Groups(['artwork:lire','artwork:ecrire'])]
     private ?int $aicId = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['artwork:lire','artwork:ecrire'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 30, nullable: true)]
+    #[Groups(['artwork:lire','artwork:ecrire'])]
     private ?string $date = null;
 
     #[ORM\ManyToOne(inversedBy: 'yes')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['artwork:lire','artwork:ecrire','artist:lire'])]
     private ?Artist $artist = null;
 
     /**
      * @var Collection<int, Style>
      */
     #[ORM\ManyToMany(targetEntity: Style::class, inversedBy: 'artworks')]
+    #[Groups(['artwork:lire','artwork:ecrire','style:lire'])]
     private Collection $styles;
 
     /**
      * @var Collection<int, Category>
      */
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'artworks')]
+    #[Groups(['artwork:lire','artwork:ecrire','category:lire'])]
     private Collection $categories;
 
     #[ORM\Column(length: 255, unique:true)]
+    #[Groups(['artwork:lire','artwork:ecrire'])]
     private ?string $image_id = null;
 
     public function __construct()
