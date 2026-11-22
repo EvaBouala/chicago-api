@@ -19,7 +19,7 @@ class Artwork
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(unique:true)]
     private ?int $id = null;
 
     /** Identifiant de l'oeuvre dans l'API Art Institute of Chicago (clé naturelle, règle T2). */
@@ -48,7 +48,7 @@ class Artwork
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'artworks')]
     private Collection $categories;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique:true)]
     private ?string $image_id = null;
 
     public function __construct()
