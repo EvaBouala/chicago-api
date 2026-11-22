@@ -23,6 +23,7 @@ class Artist
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['artist:lire','artist:ecrire','artwork:lire'])]
     private ?string $name = null;
 
     /**
