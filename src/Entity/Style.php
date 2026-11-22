@@ -23,6 +23,7 @@ class Style
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
+    #[Groups(['style:lire','style:ecrire','artwork:lire'])]
     private ?string $name = null;
 
     /**
