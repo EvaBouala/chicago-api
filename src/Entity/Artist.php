@@ -19,7 +19,7 @@ class Artist
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(unique)]
+    #[ORM\Column(unique:true)]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
