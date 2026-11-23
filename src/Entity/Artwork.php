@@ -36,7 +36,7 @@ class Artwork
 
     #[ORM\Column(length: 30, nullable: true)]
     #[Groups(['artwork:lire','artwork:ecrire'])]
-    #[Assert\NotBlank(allowNull: true)] // null accepté (date inconnue), chaîne vide refusée
+    #[Assert\NotBlank(allowNull: true)] 
     #[Assert\Length(max: 30)]
     private ?string $date = null;
 
