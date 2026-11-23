@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
-use Symfony\Component\Validator\Contraints as Assert;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: StyleRepository::class)]
 #[ApiResource (
@@ -20,16 +20,20 @@ class Style
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['style:lire'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
     #[Groups(['style:lire','style:ecrire','artwork:lire'])]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 100)]
     private ?string $name = null;
 
     /**
      * @var Collection<int, Artwork>
      */
     #[ORM\ManyToMany(targetEntity: Artwork::class, mappedBy: 'styles')]
+    #[Groups(['style:lire'])]
     private Collection $artworks;
 
     public function __construct()

@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
-use Symfony\Component\Validator\Contraints as Assert;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ArtworkRepository::class)]
 #[ApiResource (
@@ -20,42 +20,50 @@ class Artwork
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(unique:true)]
+    #[Groups(['artwork:lire'])]
     private ?int $id = null;
 
     /** Identifiant de l'oeuvre dans l'API Art Institute of Chicago (clé naturelle, règle T2). */
-    #[ORM\Column(unique: true, nullable: true)]  
-    #[Groups(['artwork:lire','artwork:ecrire'])]
+    #[ORM\Column(unique: true, nullable: true)]
+    #[Groups(['artwork:lire'])]
+    #[Assert\Positive]
     private ?int $aicId = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(['artwork:lire','artwork:ecrire'])]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
     private ?string $title = null;
 
     #[ORM\Column(length: 30, nullable: true)]
     #[Groups(['artwork:lire','artwork:ecrire'])]
+    #[Assert\Length(max: 30)]
     private ?string $date = null;
 
     #[ORM\ManyToOne(inversedBy: 'yes')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['artwork:lire','artwork:ecrire','artist:lire'])]
+    #[Groups(['artwork:lire','artwork:ecrire'])]
+    #[Assert\NotNull]
     private ?Artist $artist = null;
 
     /**
      * @var Collection<int, Style>
      */
     #[ORM\ManyToMany(targetEntity: Style::class, inversedBy: 'artworks')]
-    #[Groups(['artwork:lire','artwork:ecrire','style:lire'])]
+    #[Groups(['artwork:lire','artwork:ecrire'])]
     private Collection $styles;
 
     /**
      * @var Collection<int, Category>
      */
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'artworks')]
-    #[Groups(['artwork:lire','artwork:ecrire','category:lire'])]
+    #[Groups(['artwork:lire','artwork:ecrire'])]
     private Collection $categories;
 
     #[ORM\Column(length: 255, unique:true)]
     #[Groups(['artwork:lire','artwork:ecrire'])]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
     private ?string $image_id = null;
 
     public function __construct()
