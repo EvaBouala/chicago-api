@@ -25,6 +25,8 @@ class ImportArtworksCommand
 {
     private const API_URL = 'https://api.artic.edu/api/v1/artworks/search';
     private const FIELDS = 'id,title,artist_title,date_display,image_id,style_titles,classification_titles';
+    /** Valeur de remplacement quand l'artiste, les styles ou les catégories sont absents (feuille de mapping). */
+    private const INCONNU = 'inconnu';
 
     /** Mémoire de l'import : évite de créer deux fois la même entité avant le flush. */
     private array $artists = [];
@@ -48,6 +50,8 @@ class ImportArtworksCommand
         // ===================== E - EXTRAIRE =====================
         $response = $this->httpClient->request('GET', self::API_URL, [
             'query' => ['q' => $sujet, 'limit' => 50, 'fields' => self::FIELDS],
+            // L'API AIC refuse (403) toute requête sans cet en-tête d'identification
+            'headers' => ['AIC-User-Agent' => 'chicago-api (projet etudiant IIM)'],
         ]);
         $rows = $response->toArray()['data'] ?? [];
         $io->info(sprintf('%d oeuvres reçues pour « %s ».', \count($rows), $sujet));
@@ -58,11 +62,11 @@ class ImportArtworksCommand
         foreach ($rows as $row) {
             // ===================== T - TRANSFORMER =====================
 
-            // T-règle 1 : sans titre, sans auteur ou sans image_id -> on ignore
+            // T-règle 1 : sans titre -> oeuvre ignorée.
+            // Sans image_id -> ignorée aussi : la colonne est non nullable et unique, on ne peut pas l'écrire vide.
             $title = trim((string) ($row['title'] ?? ''));
-            $artistName = trim((string) ($row['artist_title'] ?? ''));
             $imageId = trim((string) ($row['image_id'] ?? ''));
-            if ('' === $title || '' === $artistName || '' === $imageId) {
+            if ('' === $title || '' === $imageId) {
                 ++$ignoredInvalid;
                 continue;
             }
@@ -75,21 +79,31 @@ class ImportArtworksCommand
             }
             $seenIds[$aicId] = true;
 
-            // T-mapping (T-règle 6 : titre tronqué à 255 caractères)
+            // T-règle 3 : artiste null ou vide -> "inconnu" ; puis retrouvé ou créé
+            $artistName = trim((string) ($row['artist_title'] ?? ''));
+            if ('' === $artistName) {
+                $artistName = self::INCONNU;
+            }
+
+            // T-règle 6 : date "n.d." (non datée) ou vide -> null, sinon tronquée à 30 caractères
+            $date = trim((string) ($row['date_display'] ?? ''));
+            $date = ('' === $date || 'n.d.' === mb_strtolower($date)) ? null : mb_substr($date, 0, 30);
+
+            // T-mapping (titre tronqué à 255 caractères)
             $artwork = (new Artwork())
                 ->setAicId($aicId)
                 ->setTitle(mb_substr($title, 0, 255))
-                ->setDate(isset($row['date_display']) ? mb_substr((string) $row['date_display'], 0, 30) : null)
+                ->setDate($date)
                 ->setImageId($imageId)
-                ->setArtist($this->findOrCreateArtist($artistName)); // T-règle 3
+                ->setArtist($this->findOrCreateArtist($artistName));
 
-            // T-règle 4 : styles normalisés
-            foreach ($this->normalize($row['style_titles'] ?? []) as $name) {
+            // T-règle 4 : styles normalisés ; liste vide -> ["inconnu"]
+            foreach ($this->normalize($row['style_titles'] ?? []) ?: [self::INCONNU] as $name) {
                 $artwork->addStyle($this->findOrCreateStyle($name));
             }
 
-            // T-règle 5 : classifications normalisées
-            foreach ($this->normalize($row['classification_titles'] ?? []) as $name) {
+            // T-règle 5 : classifications normalisées ; liste vide -> ["inconnu"]
+            foreach ($this->normalize($row['classification_titles'] ?? []) ?: [self::INCONNU] as $name) {
                 $artwork->addCategory($this->findOrCreateCategory($name));
             }
 
