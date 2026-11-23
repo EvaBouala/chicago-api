@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1060" height="470" viewBox="0 0 1060 470" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <rect width="1060" height="470" fill="#ffffff"/>
+
+  <!-- ===== Liens ===== -->
+  <g stroke="#475569" stroke-width="2" fill="none">
+    <!-- Artist 1 — N Artwork -->
+    <path d="M230 210 H340"/>
+    <path d="M240 200 V220"/>                                 <!-- barre "1" côté Artist -->
+    <path d="M324 210 L340 201 M324 210 L340 219"/>           <!-- patte "N" côté Artwork -->
+
+    <!-- Artwork N — N Style -->
+    <path d="M590 165 H690 V78 H830"/>
+    <path d="M606 165 L590 156 M606 165 L590 174"/>
+    <path d="M814 78 L830 69 M814 78 L830 87"/>
+
+    <!-- Artwork N — N Category -->
+    <path d="M590 265 H690 V342 H830"/>
+    <path d="M606 265 L590 256 M606 265 L590 274"/>
+    <path d="M814 342 L830 333 M814 342 L830 351"/>
+  </g>
+
+  <!-- Libellés des relations -->
+  <g font-size="13" fill="#0f172a" text-anchor="middle">
+    <text x="285" y="196" font-weight="600">a créé</text>
+    <text x="285" y="236" fill="#64748b" font-size="12">ManyToOne</text>
+    <text x="250" y="190" fill="#b45309" font-weight="700">1</text>
+    <text x="322" y="196" fill="#b45309" font-weight="700">N</text>
+
+    <text x="752" y="70" font-weight="600">relève du style</text>
+    <text x="752" y="96" fill="#64748b" font-size="12">ManyToMany</text>
+    <text x="604" y="155" fill="#b45309" font-weight="700">N</text>
+    <text x="820" y="66" fill="#b45309" font-weight="700">N</text>
+
+    <text x="752" y="334" font-weight="600">est classée dans</text>
+    <text x="752" y="360" fill="#64748b" font-size="12">ManyToMany</text>
+    <text x="604" y="289" fill="#b45309" font-weight="700">N</text>
+    <text x="820" y="330" fill="#b45309" font-weight="700">N</text>
+  </g>
+
+  <!-- ===== Artist ===== -->
+  <g>
+    <rect x="30" y="162" width="200" height="96" rx="8" fill="#ffffff" stroke="#0e7490" stroke-width="2"/>
+    <path d="M30 196 V170 a8 8 0 0 1 8 -8 H222 a8 8 0 0 1 8 8 V196 Z" fill="#0e7490"/>
+    <text x="130" y="185" text-anchor="middle" fill="#ffffff" font-size="15" font-weight="700">Artist</text>
+    <g font-size="13" fill="#0f172a">
+      <text x="44" y="218">id</text><text x="216" y="218" text-anchor="end" fill="#64748b">int · PK</text>
+      <text x="44" y="244">name</text><text x="216" y="244" text-anchor="end" fill="#64748b">string(255)</text>
+    </g>
+  </g>
+
+  <!-- ===== Artwork ===== -->
+  <g>
+    <rect x="340" y="110" width="250" height="200" rx="8" fill="#ffffff" stroke="#0e7490" stroke-width="2"/>
+    <path d="M340 144 V118 a8 8 0 0 1 8 -8 H582 a8 8 0 0 1 8 8 V144 Z" fill="#0e7490"/>
+    <text x="465" y="133" text-anchor="middle" fill="#ffffff" font-size="15" font-weight="700">Artwork</text>
+    <g font-size="13" fill="#0f172a">
+      <text x="354" y="166">id</text><text x="576" y="166" text-anchor="end" fill="#64748b">int · PK</text>
+      <text x="354" y="192" font-weight="600">aicId</text><text x="576" y="192" text-anchor="end" fill="#b45309">int · UK · clé naturelle</text>
+      <text x="354" y="218">title</text><text x="576" y="218" text-anchor="end" fill="#64748b">string(255)</text>
+      <text x="354" y="244">date</text><text x="576" y="244" text-anchor="end" fill="#64748b">string(30) · nullable</text>
+      <text x="354" y="270">image_id</text><text x="576" y="270" text-anchor="end" fill="#64748b">string(255) · UK</text>
+      <text x="354" y="296">artist_id</text><text x="576" y="296" text-anchor="end" fill="#64748b">int · FK → Artist</text>
+    </g>
+  </g>
+
+  <!-- ===== Style ===== -->
+  <g>
+    <rect x="830" y="30" width="200" height="96" rx="8" fill="#ffffff" stroke="#0e7490" stroke-width="2"/>
+    <path d="M830 64 V38 a8 8 0 0 1 8 -8 H1022 a8 8 0 0 1 8 8 V64 Z" fill="#0e7490"/>
+    <text x="930" y="53" text-anchor="middle" fill="#ffffff" font-size="15" font-weight="700">Style</text>
+    <g font-size="13" fill="#0f172a">
+      <text x="844" y="86">id</text><text x="1016" y="86" text-anchor="end" fill="#64748b">int · PK</text>
+      <text x="844" y="112">name</text><text x="1016" y="112" text-anchor="end" fill="#64748b">string(100)</text>
+    </g>
+  </g>
+
+  <!-- ===== Category ===== -->
+  <g>
+    <rect x="830" y="294" width="200" height="96" rx="8" fill="#ffffff" stroke="#0e7490" stroke-width="2"/>
+    <path d="M830 328 V302 a8 8 0 0 1 8 -8 H1022 a8 8 0 0 1 8 8 V328 Z" fill="#0e7490"/>
+    <text x="930" y="317" text-anchor="middle" fill="#ffffff" font-size="15" font-weight="700">Category</text>
+    <g font-size="13" fill="#0f172a">
+      <text x="844" y="350">id</text><text x="1016" y="350" text-anchor="end" fill="#64748b">int · PK</text>
+      <text x="844" y="376">name</text><text x="1016" y="376" text-anchor="end" fill="#64748b">string(100)</text>
+    </g>
+  </g>
+
+  <!-- Tables de jointure -->
+  <g font-size="11.5" fill="#64748b" font-style="italic" text-anchor="middle">
+    <text x="930" y="144">table de jointure : artwork_style</text>
+    <text x="930" y="408">table de jointure : artwork_category</text>
+  </g>
+
+  <!-- ===== Légende ===== -->
+  <line x1="30" y1="428" x2="1030" y2="428" stroke="#e2e8f0"/>
+  <g font-size="12" fill="#475569">
+    <text x="30" y="452"><tspan font-weight="700">PK</tspan> clé technique (auto-incrémentée)</text>
+    <text x="270" y="452"><tspan font-weight="700">UK</tspan> unique</text>
+    <text x="350" y="452"><tspan font-weight="700">FK</tspan> clé étrangère</text>
+    <text x="470" y="452"><tspan font-weight="700" fill="#b45309">aicId</tspan> = id de l'œuvre dans l'API du musée, caché dans notre API</text>
+  </g>
+</svg>

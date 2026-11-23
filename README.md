@@ -41,33 +41,7 @@ Le contrat OpenAPI brut est sur `/api/docs.jsonopenapi`.
 
 ## 2. Le modèle
 
-```mermaid
-erDiagram
-    ARTIST ||--o{ ARTWORK : "a créé"
-    ARTWORK }o--o{ STYLE : "relève du style"
-    ARTWORK }o--o{ CATEGORY : "est classée dans"
-
-    ARTIST {
-        int id PK
-        string name "255"
-    }
-    ARTWORK {
-        int id PK
-        int aicId UK "clé naturelle, cachée dans l'API"
-        string title "255"
-        string date "30, nullable"
-        string image_id UK "255"
-        int artist_id FK
-    }
-    STYLE {
-        int id PK
-        string name "100"
-    }
-    CATEGORY {
-        int id PK
-        string name "100"
-    }
-```
+![Schéma du modèle : Artist, Artwork, Style, Category](docs/modele.svg)
 
 | Relation | Type | Se lit | Côté propriétaire |
 |---|---|---|---|
