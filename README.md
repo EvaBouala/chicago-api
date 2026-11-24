@@ -131,6 +131,7 @@ Non réalisés pour l'instant (bonus) : la pagination par défaut d'API Platform
 **Outil :** Claude (Claude Code, dans VS Code).
 
 **Fait avec Claude :**
+- **L'ETL (la commande d'import `app:import-artworks`) :** écrit avec Claude à partir de nos règles de transformation.
 - **Débogage :**
   - l'import ne marchait plus parce que l'API du musée renvoie maintenant 403 sans en-tête `AIC-User-Agent` ;
   - le schéma de la base n'était plus synchronisé avec les entités : il manquait la migration de l'index unique sur `image_id` ;
