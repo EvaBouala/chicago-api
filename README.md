@@ -135,8 +135,6 @@ Les recherches sont partielles et ne tiennent pas compte de la casse. La répons
 | `/api/artworks?tri=asc` (ou `desc`) | tri alphabétique par titre |
 | `/api/artworks?artiste=monet&titre=water&tri=desc&page=1` | les filtres se combinent entre eux et avec la pagination |
 
-Pas d'endpoint `/stats` (bonus non réalisé).
-
 ---
 
 ## 5. Utilisation de l'IA
