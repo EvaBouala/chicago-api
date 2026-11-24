@@ -8,4 +8,6 @@
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
-/.env
+
+# Aucun fichier .env versionné : chacun crée son .env en local (voir README)
+/.env*

@@ -12,21 +12,35 @@ Projet du cours *Architecture de données, API, plateforme* (IIM, A3) par Eva Bo
 **Prérequis :** PHP 8.4 ou plus (extensions `pdo_sqlite`, `sqlite3`, `intl`, `ctype`, `iconv`), Composer et Git.
 Pas de Docker, pas de serveur de base de données : SQLite tient dans le fichier `var/data.db`.
 
+**1. Récupérer le projet**
 ```bash
-# 1. Récupérer le projet
 git clone https://github.com/EvaBouala/chicago-api.git
 cd chicago-api
+```
 
-# 2. Installer les dépendances
+**2. Créer le fichier `.env`** à la racine du projet (il n'est pas versionné, voir la note plus bas), avec ce contenu :
+```dotenv
+APP_ENV=dev
+APP_SECRET=remplacer-par-une-chaine-aleatoire
+APP_SHARE_DIR=var/share
+DEFAULT_URI=http://localhost
+DATABASE_URL="sqlite:///%kernel.project_dir%/var/data.db"
+CORS_ALLOW_ORIGIN='^https?://(localhost|127\.0\.0\.1)(:[0-9]+)?$'
+```
+Cette étape doit être faite **avant** `composer install`, qui a besoin du `.env` pour finir son installation.
+
+**3. Installer, créer la base, importer, lancer**
+```bash
+# Installer les dépendances
 composer install
 
-# 3. Créer la base (le fichier var/data.db est créé tout seul) et les tables
+# Créer la base (le fichier var/data.db est créé tout seul) et les tables
 php bin/console doctrine:migrations:migrate -n
 
-# 4. Remplir la base depuis l'API de l'Art Institute of Chicago
+# Remplir la base depuis l'API de l'Art Institute of Chicago
 php bin/console app:import-artworks monet
 
-# 5. Lancer le serveur
+# Lancer le serveur
 php -S 127.0.0.1:8000 -t public
 ```
 
@@ -35,8 +49,7 @@ Le contrat OpenAPI brut est sur `/api/docs.jsonopenapi`.
 
 > Si la Symfony CLI est installée, on peut aussi utiliser `symfony console ...` à la place de `php bin/console ...`
 > et `symfony serve -d` à la place de `php -S`.
-> Le `.env` n'est pas versionné (il est dans le `.gitignore`). Le dépôt fournit à la place un `.env.dist` avec les valeurs par défaut (aucun secret) : Symfony le charge automatiquement quand il n'y a pas de `.env`, la base pointe alors sur `var/data.db`.
-> Pour personnaliser la configuration en local : `cp .env.dist .env`, puis modifier le `.env`.
+> Aucun fichier `.env` (`.env`, `.env.dev`, `.env.local`…) n'est versionné : ils sont tous dans le `.gitignore`. Chacun crée son propre `.env` en local (étape 2).
 
 ---
 
@@ -147,7 +160,7 @@ Les recherches sont partielles et ne tiennent pas compte de la casse. La répons
 - **Débogage :**
   - l'import ne marchait plus parce que l'API du musée renvoie maintenant 403 sans en-tête `AIC-User-Agent` ;
   - le schéma de la base n'était plus synchronisé avec les entités : il manquait la migration de l'index unique sur `image_id` ;
-  - un clone neuf du projet ne démarrait pas sans `.env` : on garde le `.env` hors de git et on versionne un `.env.dist` à la place ;
+  - un clone neuf du projet ne démarrait pas sans `.env` : on garde tous les `.env` hors de git et le README donne le contenu du `.env` à créer ;
   - Windows (Smart App Control) bloquait la Symfony CLI : on est passées à `php bin/console`.
 - **Compléter ce qui manquait :** aligner la commande d'import sur notre feuille de mapping (artiste, style et catégorie « inconnu », date « n.d. » → `null`, `aicId` caché dans l'API) et vérifier l'import (deux lancements, zéro doublon).
 - **Git :** démêler nos branches, où des commits existaient en double après une erreur de branche, et remettre `feat/eva` et `master` d'aplomb.
