@@ -23,10 +23,9 @@ class Artwork
     #[Groups(['artwork:lire'])]
     private ?int $id = null;
 
-    /** Identifiant de l'oeuvre dans l'API Art Institute of Chicago (clé naturelle, règle T2). */
+    /** Identifiant de l'oeuvre dans l'API Art Institute of Chicago (clé naturelle, règle T2).
+     *  Aucun groupe : caché dans l'API, jamais écrit par le client, seulement par l'import. */
     #[ORM\Column(unique: true, nullable: true)]
-    #[Groups(['artwork:lire'])]
-    #[Assert\Positive]
     private ?int $aicId = null;
 
     #[ORM\Column(length: 255)]
@@ -37,6 +36,7 @@ class Artwork
 
     #[ORM\Column(length: 30, nullable: true)]
     #[Groups(['artwork:lire','artwork:ecrire'])]
+    #[Assert\NotBlank(allowNull: true)] 
     #[Assert\Length(max: 30)]
     private ?string $date = null;
 
