@@ -2,7 +2,15 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\PartialSearchFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SortFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\QueryParameter;
 use App\Repository\ArtworkRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -12,6 +20,19 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ArtworkRepository::class)]
 #[ApiResource (
+    operations: [
+        // Filtres de la liste : recherche partielle, sans tenir compte de la casse
+        new GetCollection(parameters: [
+            'titre' => new QueryParameter(filter: new PartialSearchFilter(), property: 'title'),
+            'artiste' => new QueryParameter(filter: new PartialSearchFilter(), property: 'artist.name'),
+            'style' => new QueryParameter(filter: new PartialSearchFilter(), property: 'styles.name'),
+            'categorie' => new QueryParameter(filter: new PartialSearchFilter(), property: 'categories.name'),
+            'tri' => new QueryParameter(filter: new SortFilter(), property: 'title'),
+        ]),
+        new Get(), new Post(), new Patch(), new Delete(),
+    ],
+    // Pagination : 10 oeuvres par page, ?page=2 pour la suite
+    paginationItemsPerPage: 10,
     normalizationContext: ['groups' => ['artwork:lire']],
     denormalizationContext: ['groups' => ['artwork:ecrire']],
 )]

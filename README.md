@@ -120,9 +120,22 @@ Chaque règle est commentée dans le code (`T-règle 1`, `T-règle 2`…).
 
 ---
 
-## 4. Filtres et statistiques
+## 4. Pagination et filtres
 
-Non réalisés pour l'instant (bonus) : la pagination par défaut d'API Platform est active (30 éléments par page, `?page=2`).
+La liste des œuvres (`GET /api/artworks`) est **paginée par 10** et **filtrable**. Les filtres sont déclarés sur l'entité `Artwork` avec des `QueryParameter` d'API Platform.
+Les recherches sont partielles et ne tiennent pas compte de la casse. La réponse contient `totalItems` et un bloc `view` (first, next, last).
+
+| URL à tester | Résultat |
+|---|---|
+| `/api/artworks?page=2` | la 2e page (œuvres 11 à 20) |
+| `/api/artworks?titre=water` | les œuvres dont le titre contient « water » |
+| `/api/artworks?artiste=monet` | les œuvres dont le nom de l'artiste contient « monet » |
+| `/api/artworks?style=impression` | les œuvres dont un style contient « impression » |
+| `/api/artworks?categorie=paint` | les œuvres dont une catégorie contient « paint » |
+| `/api/artworks?tri=asc` (ou `desc`) | tri alphabétique par titre |
+| `/api/artworks?artiste=monet&titre=water&tri=desc&page=1` | les filtres se combinent entre eux et avec la pagination |
+
+Pas d'endpoint `/stats` (bonus non réalisé).
 
 ---
 
