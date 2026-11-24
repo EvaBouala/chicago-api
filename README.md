@@ -35,7 +35,8 @@ Le contrat OpenAPI brut est sur `/api/docs.jsonopenapi`.
 
 > Si la Symfony CLI est installée, on peut aussi utiliser `symfony console ...` à la place de `php bin/console ...`
 > et `symfony serve -d` à la place de `php -S`.
-> Le `.env` versionné ne contient que des valeurs par défaut (aucun secret) : la base pointe sur `var/data.db`.
+> Le `.env` n'est pas versionné (il est dans le `.gitignore`). Le dépôt fournit à la place un `.env.dist` avec les valeurs par défaut (aucun secret) : Symfony le charge automatiquement quand il n'y a pas de `.env`, la base pointe alors sur `var/data.db`.
+> Pour personnaliser la configuration en local : `cp .env.dist .env`, puis modifier le `.env`.
 
 ---
 
@@ -146,7 +147,7 @@ Les recherches sont partielles et ne tiennent pas compte de la casse. La répons
 - **Débogage :**
   - l'import ne marchait plus parce que l'API du musée renvoie maintenant 403 sans en-tête `AIC-User-Agent` ;
   - le schéma de la base n'était plus synchronisé avec les entités : il manquait la migration de l'index unique sur `image_id` ;
-  - un clone neuf du projet ne démarrait pas parce que le `.env` n'était pas versionné ;
+  - un clone neuf du projet ne démarrait pas sans `.env` : on garde le `.env` hors de git et on versionne un `.env.dist` à la place ;
   - Windows (Smart App Control) bloquait la Symfony CLI : on est passées à `php bin/console`.
 - **Compléter ce qui manquait :** aligner la commande d'import sur notre feuille de mapping (artiste, style et catégorie « inconnu », date « n.d. » → `null`, `aicId` caché dans l'API) et vérifier l'import (deux lancements, zéro doublon).
 - **Git :** démêler nos branches, où des commits existaient en double après une erreur de branche, et remettre `feat/eva` et `master` d'aplomb.
